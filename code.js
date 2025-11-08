@@ -130,34 +130,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function listenToRoomChanges(roomId, isHost) {
         const roomRef = database.ref('rooms/' + roomId);
-        roomRef.on('value', (snapshot) => {
+
+        // ขั้นแรก: เพิ่มตัวเองเข้าไปในห้องก่อนเลย (ถ้ายังไม่มี)
+        roomRef.child('voters').child(currentUserId).once('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                addCurrentUserToRoom();
+            }
+        });
+
+        // ขั้นที่สอง: เริ่มดักฟังการเปลี่ยนแปลงทั้งหมดใน voters
+        const votersRef = roomRef.child('voters');
+        votersRef.on('value', (snapshot) => {
             votersContainer.innerHTML = '';
-            const roomData = snapshot.val();
-            if (!roomData || !roomData.voters) return;
-
-            const voters = roomData.voters;
-            const voterIds = Object.keys(voters);
+            const voters = snapshot.val();
+            
             let allReady = true;
+            let voterCount = 0;
 
-            voterIds.forEach(voterId => {
-                renderVoterCard(voterId, voters[voterId]);
-                if (!voters[voterId].isReady) {
-                    allReady = false;
-                }
-            });
+            if (voters) {
+                const voterIds = Object.keys(voters);
+                voterCount = voterIds.length;
+                voterIds.forEach(voterId => {
+                    renderVoterCard(voterId, voters[voterId]);
+                    if (!voters[voterId].isReady) {
+                        allReady = false;
+                    }
+                });
+            }
 
+            // --- ควบคุม UI ของ Host ---
             if (isHost) {
-                if (voterIds.length > 0 && allReady) {
+                if (voterCount > 0 && allReady) {
                     findMovieBtn.disabled = false;
                     findMovieBtn.textContent = "ค้นหาหนังเลย!";
                 } else {
                     findMovieBtn.disabled = true;
                     findMovieBtn.textContent = "รอทุกคนกดยืนยัน...";
                 }
-            }
-            
-            if (!voters[currentUserId]) {
-                addCurrentUserToRoom();
             }
         });
     }
