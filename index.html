@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieTogether</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- เพิ่ม Font Awesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <main id="app">
+        <section id="home-page" class="page active">
+            <h1>MovieTogether</h1>
+            <p>จบปัญหา "คืนนี้ดูอะไรดี?"<br>แค่ส่งลิงก์ให้เพื่อน แล้วเราจะช่วยเเนะนำหนังเเนวที่ทุกคนต้องการเอง!</p>
+
+            <div class="home-actions">
+                <div class="action-box">
+                    <h2>สร้างห้องใหม่</h2>
+                    <p>ส่งลิงค์ให้เพื่อนๆที่คุรต้องการหาหนังด้วยกันได้เลยย!</p>
+                    <button id="create-room-btn">สร้างห้องโหวต</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="action-box">
+                    <h2>เข้าร่วมห้อง</h2>
+                    <p>ใส่รหัสห้อง</p>
+                    <div class="join-form">
+                        <input type="text" id="room-id-input" placeholder="กรอกรหัสห้อง...">
+                        <button id="join-room-btn">เข้าร่วม</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="vote-page" class="page">
+            <div class="room-id-display">
+                Room ID: <span id="room-id-text"></span>
+            </div>
+            <h2 id="room-nickname-display"></h2>
+            <p>เพิ่มชื่อของคุณ แล้วเลือกแนวหนังที่อยากดูได้เลย</p>
+            <div id="voters-container"></div>
+            <div class="vote-page-actions">
+                <button id="go-back-btn">‹ กลับหน้าแรก</button>
+                <button id="find-movie-btn">ค้นหาหนังเลย!</button>
+            </div>
+        </section>
+        <section id="results-page" class="page">
+            <div id="loading-spinner" class="hidden">
+                <div class="spinner"></div>
+            </div>
+            
+            <div id="results-content" class="hidden">
+                <p id="rationale-text" class="rationale"></p>
+                <div class="movie-result-card">
+                    <div class="poster-wrapper">
+                        <img id="movie-poster" src="" alt="Movie Poster">
+                    </div>
+                    <div class="info-wrapper">
+                        <h2 id="movie-title"></h2>
+                        <div class="movie-meta">
+                            <span id="movie-release-date"></span>
+                            <span>•</span>
+                            <span id="movie-genres"></span>
+                            <span>•</span>
+                            <span id="movie-runtime"></span>
+                        </div>
+                        <div class="user-score">
+                            <div id="score-circle" class="score-circle">
+                                <span id="score-value">0</span>
+                            </div>
+                            <strong>คะเเนน</strong>
+                        </div>
+                        <h3>Overview</h3>
+                        <p id="movie-overview"></p>
+                        <div id="watch-providers-container" class="watch-providers">
+                            <h4>Streaming</h4>
+                            <div id="provider-logos" class="provider-logos"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="trailer-container" class="trailer-container">
+                    <h3>Trailer</h3>
+                    <iframe id="movie-trailer" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="results-actions">
+                    <button id="respin-btn">สุ่มใหม่</button>
+                    <button id="start-over-btn">เริ่มโหวตใหม่</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <template id="voter-card-template">
+        <div class="voter-card">
+            <input type="text" class="voter-name" placeholder="ใส่ชื่อของคุณ...">
+            <div class="genre-cards-container"></div>
+        </div>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="data.js"></script>
+    <script src="code.js"></script>
+</body>
+</html>
